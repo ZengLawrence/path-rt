@@ -3,9 +3,7 @@ import Container from 'react-bootstrap/Container';
 function App() {
   return (
     <Container>
-      <Container>
-        <h1>Real Time Train Departures</h1>
-      </Container>
+      <h1 className="text-center">Real Time Train Departures</h1>
     </Container>
   )
 }
