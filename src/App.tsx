@@ -1,9 +1,12 @@
+import Container from 'react-bootstrap/Container';
 
 function App() {
   return (
-    <>
-      <h1>NJ Path Real Time Train Departures</h1>
-    </>
+    <Container>
+      <Container>
+        <h1>Real Time Train Departures</h1>
+      </Container>
+    </Container>
   )
 }
 
