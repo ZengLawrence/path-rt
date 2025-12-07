@@ -15,6 +15,10 @@ function parseStationData(data: any): Station[] {
   }));
 }
 
+function filterNewportOrWTC(stations: Station[]): Station[] {
+  return stations.filter(station => station.name === "NEW" || station.name === "WTC");
+}
+
 function App() {
   const [stations, setStations] = useState<Station[]>([]);
 
@@ -28,7 +32,8 @@ function App() {
       };
       const response = await fetch('bin/portauthority/ridepath.json', options);
       const data = await response.json();
-      setStations(parseStationData(data));
+      const stations = filterNewportOrWTC(parseStationData(data));
+      setStations(stations);
     }
     fetchStations();
   }, []);
