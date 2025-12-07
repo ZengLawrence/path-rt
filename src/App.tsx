@@ -23,8 +23,7 @@ function App() {
       const options = { 
         method: 'GET',
         headers: { 
-          'Accept': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Accept': 'application/json'
         }
       };
       const response = await fetch('bin/portauthority/ridepath.json', options);
