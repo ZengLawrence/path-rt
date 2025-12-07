@@ -2,21 +2,19 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import type { Station } from '../models/Station';
 
 interface Props {
-  name: string;
-  trains: Array<{
-    headSign: string;
-    arrivalTimeMessage: string;
-  }>;
+  station: Station;
 }
 
 function StationCard(props: Props) {
+  const { station } = props;
   return <Card>
-    <Card.Header>{props.name}</Card.Header>
+    <Card.Header>{station.name}</Card.Header>
     <Card.Body>
       <Container>
-        {props.trains.map((train, index) => (
+        {station.trains.map((train, index) => (
           <Row key={index}>
             <Col>{train.headSign}</Col>
             <Col className="text-end">{train.arrivalTimeMessage}</Col>
