@@ -10,16 +10,16 @@ function App() {
   const [currentLocation, setCurrentLocation] = useState<GeolocationPosition | null>(null);
 
   useEffect(() => {
-    const loadStations = async () => {
+    const loadStations = () => {
       fetchStations().then((stations) => {
         setStations(stations);
-      }).catch((error) => {
+      }).catch((error: unknown) => {
         console.log("Error fetching stations:", error);
       });
     };
-    void loadStations();
+    loadStations();
     const intervalId = setInterval(() => {
-      void loadStations();
+      loadStations();
     }, 1 * 60 * 1000); // Refresh every 1 minute
 
     return () => {
