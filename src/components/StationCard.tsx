@@ -1,3 +1,4 @@
+/* eslint-disable react-x/no-array-index-key */
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';

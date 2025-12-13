@@ -12,14 +12,14 @@ function App() {
       const stations = await fetchStations();
       setStations(stations);
     };
-    loadStations();
+    void loadStations();
   }, []);
 
   return (
     <Container>
       <h1 className="text-center">Real Time Train Departures</h1>
-      {stations.map((station, index) => (
-        <StationCard key={index} station={station} />
+      {stations.map((station) => (
+        <StationCard key={station.name} station={station} />
       ))}
     </Container>
   )

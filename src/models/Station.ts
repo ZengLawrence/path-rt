@@ -1,7 +1,9 @@
+interface Train {
+  headSign: string;
+  arrivalTimeMessage: string;
+}
+
 export interface Station {
   name: string;
-  trains: Array<{
-    headSign: string;
-    arrivalTimeMessage: string;
-  }>;
+  trains: Train[];
 }
