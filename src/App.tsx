@@ -15,12 +15,16 @@ function App() {
       setStations(stations);
     };
     void loadStations();
+    const intervalId = setInterval(() => {
+      void loadStations();
+    }, 1 * 60 * 1000); // Refresh every 1 minute
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   useEffect(() => {
-    const geoSuccess = (position: GeolocationPosition) => {
-      setCurrentLocation(position);
-    }
     const geoError = (error: GeolocationPositionError) => {
       console.error("Error obtaining geolocation:", `ERROR(${error.code.toFixed()}): ${error.message}`);
     }
@@ -29,7 +33,7 @@ function App() {
       timeout: 500,
       maximumAge: 60000
     };
-    const watchId = navigator.geolocation.watchPosition(geoSuccess, geoError, geoOptions);
+    const watchId = navigator.geolocation.watchPosition(setCurrentLocation, geoError, geoOptions);
     
     return () => {
       navigator.geolocation.clearWatch(watchId);
