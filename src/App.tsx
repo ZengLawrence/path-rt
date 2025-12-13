@@ -11,8 +11,11 @@ function App() {
 
   useEffect(() => {
     const loadStations = async () => {
-      const stations = await fetchStations();
-      setStations(stations);
+      fetchStations().then((stations) => {
+        setStations(stations);
+      }).catch((error) => {
+        console.log("Error fetching stations:", error);
+      });
     };
     void loadStations();
     const intervalId = setInterval(() => {

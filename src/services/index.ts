@@ -33,7 +33,8 @@ export async function fetchStations(): Promise<Station[]> {
     method: 'GET',
     headers: {
       'Accept': 'application/json'
-    }
+    },
+    signal: AbortSignal.timeout(5000),
   };
   const response = await fetch('bin/portauthority/ridepath.json', options);
   const data = await response.json() as unknown as RidePathResponse;
