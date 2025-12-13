@@ -3,9 +3,11 @@ import Container from 'react-bootstrap/Container';
 import StationCard from './components/StationCard';
 import type { Station } from './models/Station';
 import { fetchStations } from './services';
+import { nearestStations } from './models';
 
 function App() {
   const [stations, setStations] = useState<Station[]>([]);
+  const [currentLocation, setCurrentLocation] = useState<GeolocationPosition | null>(null);
 
   useEffect(() => {
     const loadStations = async () => {
@@ -15,10 +17,29 @@ function App() {
     void loadStations();
   }, []);
 
+  useEffect(() => {
+    const geoSuccess = (position: GeolocationPosition) => {
+      setCurrentLocation(position);
+    }
+    const geoError = (error: GeolocationPositionError) => {
+      console.error("Error obtaining geolocation:", `ERROR(${error.code.toFixed()}): ${error.message}`);
+    }
+    const geoOptions: PositionOptions = {
+      enableHighAccuracy: true,
+      timeout: 500,
+      maximumAge: 60000
+    };
+    const watchId = navigator.geolocation.watchPosition(geoSuccess, geoError, geoOptions);
+    
+    return () => {
+      navigator.geolocation.clearWatch(watchId);
+    };
+  }, []);
+
   return (
     <Container>
       <h1 className="text-center">Real Time Train Departures</h1>
-      {stations.map((station) => (
+      {nearestStations(currentLocation?.coords, stations).map((station) => (
         <StationCard key={station.name} station={station} />
       ))}
     </Container>
