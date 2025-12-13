@@ -24,11 +24,6 @@ function parseStationData(data: RidePathResponse): Station[] {
   }));
 }
 
-function filterNewportOrWTC(stations: Station[]): Station[] {
-  return stations.filter(station => station.name === "NEW" || station.name === "WTC");
-}
-
-
 export async function fetchStations(): Promise<Station[]> {
   const options = {
     method: 'GET',
@@ -38,5 +33,5 @@ export async function fetchStations(): Promise<Station[]> {
   };
   const response = await fetch('bin/portauthority/ridepath.json', options);
   const data = await response.json() as unknown as RidePathResponse;
-  return filterNewportOrWTC(parseStationData(data));
+  return parseStationData(data);
 }
