@@ -44,7 +44,7 @@ function App() {
     <Container>
       <h1 className="text-center">Real Time Train Departures</h1>
       {nearestStations(currentLocation?.coords, stations).map((station) => (
-        <StationCard key={station.name} station={station} />
+        <StationCard key={station.key} station={station} />
       ))}
     </Container>
   )

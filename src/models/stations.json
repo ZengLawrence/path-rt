@@ -1,53 +1,66 @@
 {
   "NEW": {
+    "name": "Newport",
     "latitude": 40.72721359118648,
     "longitude": -74.03386755108984
   },
   "WTC": {
+    "name": "World Trade Center",
     "latitude": 40.713473269770965,
     "longitude": -74.0101273312774
   },
   "NWK": {
+    "name": "Newark",
     "latitude": 40.73761071400534,
     "longitude": -74.16366334586843
   },
   "HAR": {
+    "name": "Harrison",
     "latitude": 40.74247646514857,
     "longitude": -74.15561250724703
   },
   "JSQ": {
+    "name": "Journal Square",
     "latitude": 40.735966920887485,
     "longitude": -74.0629475913828
   },
   "GRV": {
+    "name": "Grove Street",
     "latitude": 40.72253537709792,
     "longitude": -74.04255066862564
   },
   "EXP": {
+    "name": "Exchange Place",
     "latitude": 40.71993335936813,
     "longitude": -74.03173600177483
   },
   "HOB": {
+    "name": "Hoboken",
     "latitude": 40.73511650072445,
     "longitude": -74.02887951552538
   },
   "CHR": {
+    "name": "Christopher Street",
     "latitude": 40.73312882826327,
     "longitude": -74.00709145970625
   },
   "09S": {
+    "name": "9th Street",
     "latitude": 40.734437721605616,
     "longitude": -73.99874442524617
   },
   "14S": {
+    "name": "14th Street",
     "latitude": 40.73764887260647,
     "longitude": -73.9970492691645
   },
   "23S": {
+    "name": "23rd Street",
     "latitude": 40.7429529601587,
     "longitude": -73.99294022818027
   },
   "33S": {
+    "name": "33rd Street",
     "latitude": 40.748711274494774,
     "longitude": -73.988474586689
   }

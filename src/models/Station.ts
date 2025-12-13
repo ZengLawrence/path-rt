@@ -4,6 +4,7 @@ interface Train {
 }
 
 export interface Station {
+  key: string;
   name: string;
   trains: Train[];
 }

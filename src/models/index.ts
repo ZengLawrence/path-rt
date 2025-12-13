@@ -13,7 +13,7 @@ export function nearestStations(
   }
 
   const stationsWithDistance = stations.map((station) => {
-    const coords = stationsData[station.name];
+    const coords = stationsData[station.key];
     if (!coords) {
       return { station, distance: Infinity };
     }
