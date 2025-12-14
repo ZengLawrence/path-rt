@@ -8,11 +8,13 @@ import { nearestStations } from './models';
 function App() {
   const [stations, setStations] = useState<Station[]>([]);
   const [currentLocation, setCurrentLocation] = useState<GeolocationPosition | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   useEffect(() => {
     const loadStations = () => {
       fetchStations().then((stations) => {
         setStations(stations);
+        setLastUpdated(new Date());
       }).catch((error: unknown) => {
         console.log("Error fetching stations:", error);
       });
@@ -46,6 +48,7 @@ function App() {
   return (
     <Container>
       <h1 className="text-center">Real Time Train Departures</h1>
+      <p>Last updated: {lastUpdated ? lastUpdated.toLocaleString() : "Pending..."}</p>
       {nearestStations(currentLocation?.coords, stations).map((station) => (
         <StationCard key={station.key} station={station} />
       ))}
