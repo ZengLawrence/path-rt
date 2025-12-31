@@ -47,7 +47,7 @@ function App() {
 
   return (
     <Container>
-      <h1 className="text-center">Real Time Train Departures</h1>
+      <h1 className="text-center">NJ Path</h1>
       <p>Last updated: {lastUpdated ? lastUpdated.toLocaleString() : "Pending..."}</p>
       {nearestStations(currentLocation?.coords, stations).map((station) => (
         <StationCard key={station.key} station={station} />
