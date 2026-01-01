@@ -4,7 +4,8 @@ import StationCard from './components/StationCard';
 import TripSelect from './components/TripSelect';
 import { useGeoLocation, useSchedule } from './hooks';
 import { allStationKeysAndNames, sortByDistance } from './models';
-import { getDestinationTargets, getSchedule } from './models/maps';
+import { getDestinationTargets } from './models/maps';
+import { getSchedule } from "./models/schedules";
 import type { Station } from './models/Station';
 
 function byName(a: { name: string }, b: { name: string }) {
