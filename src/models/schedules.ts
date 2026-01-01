@@ -1,5 +1,10 @@
+export type ScheduleType = 'weekday' | 'weeknight' | 'holiday' | 'weekend';
 
-export function getSchedule(date: Date): 'weekday' | 'weeknight' | 'holiday' {
+export function scheduleType(date: Date): ScheduleType {
+  const day = date.getDay();
+  if (day === 0 || day === 6) {
+    return 'weekend';
+  }
   const hour = date.getHours();
   const isHoliday = (date: Date): boolean => {
     const month = date.getMonth();

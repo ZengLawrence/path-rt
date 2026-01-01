@@ -1,3 +1,5 @@
+import type { ScheduleType } from "./schedules";
+
 class EdgeNode {
   fromKey: string;
   toKey: string;
@@ -30,20 +32,23 @@ class Graph {
 
 }
 
-function addLine(graph: Graph, line: string[]) {
+function addLine(graph: Graph, line: string[], directed = false) {
   const target = line[line.length - 1];
   const reversedTarget = line[0];
   for (let i = 0; i < line.length - 1; i++) {
     const from = line[i];
     const to = line[i + 1];
-    graph.addEdge(from, target, to, reversedTarget);
+    graph.addEdge(from, target, to, reversedTarget, directed);
   }
 }
 
-function buildMapGraph(lines: string[][]): Graph {
+function buildMapGraph(lines: string[][], directedLines: string[][] = []): Graph {
   const graph = new Graph();
   for (const line of lines) {
     addLine(graph, line);
+  }
+  for (const line of directedLines) {
+    addLine(graph, line, true);
   }
   return graph;
 }
@@ -57,6 +62,8 @@ const weekdayMapGraph = buildMapGraph([WTC_NWK_LINE, JSQ_33S_LINE, HOK_33S_LINE,
 const JSQ_HOK_33S_LINE = ['JSQ', 'GRV', 'NEW', 'HOK', 'CHR', '09S', '14S', '23S', '33S', 'HOK'];
 const weeknightHolidayMapGraph = buildMapGraph([WTC_NWK_LINE, JSQ_HOK_33S_LINE]);
 
+const _33S_HOK_JSQ_LINE = ['33S', '23S', '14S', '09S', 'CHR', 'HOK', 'NEW', 'EXP', 'GRV', 'JSQ'];
+const weekendMapGraph = buildMapGraph([WTC_NWK_LINE], [JSQ_HOK_33S_LINE, _33S_HOK_JSQ_LINE]);
 export interface TripSegment {
   key: string;
   target: string;
@@ -87,8 +94,20 @@ function getTrip(graph: Graph, from: string, to: string): TripSegment[] {
   return path;
 }
 
-export function getDestinationTargets(from: string, to: string, schedule: 'weekday' | 'weeknight' | 'holiday' = 'weekday'): TripSegment[] {
-  const graph = schedule === 'weekday' ? weekdayMapGraph : weeknightHolidayMapGraph;
+function getGraph(schedule: ScheduleType): Graph {
+  switch (schedule) {
+    case 'weeknight':
+    case 'holiday':
+      return weeknightHolidayMapGraph;
+    case 'weekend':
+      return weekendMapGraph;
+    default:
+      return weekdayMapGraph;
+  }
+}
+
+export function getDestinationTargets(from: string, to: string, schedule: ScheduleType = 'weekday'): TripSegment[] {
+  const graph = getGraph(schedule);
   const trip = getTrip(graph, from, to);
   const returnTrip = getTrip(graph, to, from);
   return [trip[0], returnTrip[0]];

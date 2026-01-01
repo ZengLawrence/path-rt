@@ -5,7 +5,7 @@ import TripSelect from './components/TripSelect';
 import { useGeoLocation, useSchedule } from './hooks';
 import { allStationKeysAndNames, sortByDistance } from './models';
 import { getDestinationTargets } from './models/maps';
-import { getSchedule } from "./models/schedules";
+import { scheduleType } from "./models/schedules";
 import type { Station } from './models/Station';
 
 function byName(a: { name: string }, b: { name: string }) {
@@ -30,7 +30,7 @@ function App() {
     if (key1 == "all" || key2 == "all") {
       return station;
     } else {
-      const targets = getDestinationTargets(key1, key2, getSchedule(new Date()))
+      const targets = getDestinationTargets(key1, key2, scheduleType(new Date()))
         .filter(segment => segment.key == station.key)
         .map(segment => segment.target);
       const targetedTrains = station.trains.filter(train => targets.includes(train.target));

@@ -21,3 +21,11 @@ describe('weeknight/holiday schedule', () => {
   });
 });
 
+describe('Weekend schedule', () => {
+  test('WTC to NEW should return NWK target for WTC and JSQ target for NEW', () => {
+    expect(getDestinationTargets('WTC', 'NEW', 'weekend')).toEqual([
+      { key: 'WTC', target: 'NWK' },
+      { key: 'NEW', target: 'JSQ' },
+    ]);
+  });
+});
