@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { getDestinationTargets } from './maps';
+import { getDestinationTargets, getSchedule } from './maps';
 
 describe('Weekday schedule', () => {
   test('WTC to NEW should return HOK target for WTC and WTC target for NEW', () => {
@@ -16,7 +16,41 @@ describe('weeknight/holiday schedule', () => {
       { key: 'WTC', target: 'NWK' },
       { key: 'NEW', target: 'JSQ' },
     ];
-    expect(getDestinationTargets('WTC', 'NEW', 'weeknight')).toEqual(expectedTargets);  
+    expect(getDestinationTargets('WTC', 'NEW', 'weeknight')).toEqual(expectedTargets);
     expect(getDestinationTargets('WTC', 'NEW', 'holiday')).toEqual(expectedTargets);
+  });
+});
+
+describe('Get schedule', () => {
+  const January = 0;
+
+  test('Monday to Friday 6am to 11pm (exclusive) should return "weekend" schedule', () => {
+    expect(getSchedule(new Date(2026, January, 5, 10, 0))).toEqual('weekday');
+    expect(getSchedule(new Date(2026, January, 6, 6, 0))).toEqual('weekday');
+    expect(getSchedule(new Date(2026, January, 7, 8, 45))).toEqual('weekday');
+    expect(getSchedule(new Date(2026, January, 8, 20, 15))).toEqual('weekday');
+    expect(getSchedule(new Date(2026, January, 9, 22, 59))).toEqual('weekday');
+  });
+
+  test('Monday to Friday 11pm to 6am (exclusive) should return "weeknight" schedule', () => {
+    expect(getSchedule(new Date(2026, January, 5, 23, 0))).toEqual('weeknight');
+    expect(getSchedule(new Date(2026, January, 6, 0, 30))).toEqual('weeknight');
+    expect(getSchedule(new Date(2026, January, 7, 5, 59))).toEqual('weeknight');
+    expect(getSchedule(new Date(2026, January, 8, 4, 15))).toEqual('weeknight');
+    expect(getSchedule(new Date(2026, January, 9, 23, 0))).toEqual('weeknight');
+  });
+
+  test('New year\'s day should return "holiday" schedule', () => {
+    expect(getSchedule(new Date(2026, January, 1, 10, 0))).toEqual('holiday');
+  });
+
+  test('Independence day should return "holiday" schedule', () => {
+    const July = 6;
+    expect(getSchedule(new Date(2026, July, 4, 15, 30))).toEqual('holiday');
+  });
+
+  test('Christmas day should return "holiday" schedule', () => {
+    const December = 11;
+    expect(getSchedule(new Date(2026, December, 25, 9, 45))).toEqual('holiday');
   });
 });

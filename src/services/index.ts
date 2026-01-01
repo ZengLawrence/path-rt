@@ -8,6 +8,7 @@ interface RidePathResponse {
     consideredStation: string;
     destinations: {
       messages: {
+        target: string;
         headSign: string;
         arrivalTimeMessage: string;
       }[];
@@ -23,6 +24,7 @@ function parseStationData(data: RidePathResponse): Station[] {
       destination.messages.map((message) => ({
         headSign: message.headSign,
         arrivalTimeMessage: message.arrivalTimeMessage,
+        target: message.target,
       }))
     )),
   }));
