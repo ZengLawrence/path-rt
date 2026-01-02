@@ -11,6 +11,7 @@ interface RidePathResponse {
         target: string;
         headSign: string;
         arrivalTimeMessage: string;
+        lineColor: string;
       }[];
     }[];
   }[];
@@ -25,6 +26,7 @@ function parseStationData(data: RidePathResponse): Station[] {
         headSign: message.headSign,
         arrivalTimeMessage: message.arrivalTimeMessage,
         target: message.target,
+        lineColors: message.lineColor.split(',').map(color => '#' + color.trim()),
       }))
     )),
   }));

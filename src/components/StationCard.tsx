@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import type { Station } from '../models/Station';
+import LineColorIcon from './LineColorIcon';
 
 interface Props {
   station: Station;
@@ -17,8 +18,12 @@ function StationCard(props: Props) {
       <Container>
         {station.trains.map((train, index) => (
           <Row key={index}>
-            <Col>{train.headSign}</Col>
-            <Col className="text-end">{train.arrivalTimeMessage}</Col>
+            <Col>
+              <div className="d-flex align-items-center gap-1">
+                <LineColorIcon colors={train.lineColors} />{train.headSign}
+              </div>
+            </Col>
+            <Col xs="auto" className="text-end">{train.arrivalTimeMessage}</Col>
           </Row>
         ))}
       </Container>
