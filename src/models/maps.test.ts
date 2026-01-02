@@ -2,9 +2,9 @@ import { describe, test, expect } from 'vitest';
 import { getDestinationTargets } from './maps';
 
 describe('Weekday schedule', () => {
-  test('WTC to NEW should return HOK target for WTC and WTC target for NEW', () => {
+  test('WTC to NEW should return HOB target for WTC and WTC target for NEW', () => {
     expect(getDestinationTargets('WTC', 'NEW')).toEqual([
-      { key: 'WTC', target: 'HOK' },
+      { key: 'WTC', target: 'HOB' },
       { key: 'NEW', target: 'WTC' },
     ]);
   });

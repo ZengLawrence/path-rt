@@ -55,15 +55,15 @@ function buildMapGraph(lines: string[][], directedLines: string[][] = []): Graph
 
 const WTC_NWK_LINE = ['WTC', 'EXP', 'GRV', 'JSQ', 'HAR', 'NWK'];
 const JSQ_33S_LINE = ['JSQ', 'GRV', 'NEW', 'CHR', '09S', '14S', '23S', '33S'];
-const HOK_33S_LINE = ['HOK', 'CHR', '09S', '14S', '23S', '33S'];
-const WTC_HOK_LINE = ['WTC', 'EXP', 'NEW', 'HOK'];
-const weekdayMapGraph = buildMapGraph([WTC_NWK_LINE, JSQ_33S_LINE, HOK_33S_LINE, WTC_HOK_LINE]);
+const HOB_33S_LINE = ['HOB', 'CHR', '09S', '14S', '23S', '33S'];
+const WTC_HOB_LINE = ['WTC', 'EXP', 'NEW', 'HOB'];
+const weekdayMapGraph = buildMapGraph([WTC_NWK_LINE, JSQ_33S_LINE, HOB_33S_LINE, WTC_HOB_LINE]);
 
-const JSQ_HOK_33S_LINE = ['JSQ', 'GRV', 'NEW', 'HOK', 'CHR', '09S', '14S', '23S', '33S', 'HOK'];
-const weeknightHolidayMapGraph = buildMapGraph([WTC_NWK_LINE, JSQ_HOK_33S_LINE]);
+const JSQ_HOB_33S_LINE = ['JSQ', 'GRV', 'NEW', 'HOB', 'CHR', '09S', '14S', '23S', '33S', 'HOB'];
+const weeknightHolidayMapGraph = buildMapGraph([WTC_NWK_LINE, JSQ_HOB_33S_LINE]);
 
-const _33S_HOK_JSQ_LINE = ['33S', '23S', '14S', '09S', 'CHR', 'HOK', 'NEW', 'EXP', 'GRV', 'JSQ'];
-const weekendMapGraph = buildMapGraph([WTC_NWK_LINE], [JSQ_HOK_33S_LINE, _33S_HOK_JSQ_LINE]);
+const _33S_HOB_JSQ_LINE = ['33S', '23S', '14S', '09S', 'CHR', 'HOB', 'NEW', 'EXP', 'GRV', 'JSQ'];
+const weekendMapGraph = buildMapGraph([WTC_NWK_LINE], [JSQ_HOB_33S_LINE, _33S_HOB_JSQ_LINE]);
 export interface TripSegment {
   key: string;
   target: string;
