@@ -22,7 +22,7 @@ function App() {
   const bySelectedStations = (station: { key: string }) => {
     const { key1, key2 } = selectedStationKeys;
     return (key1 === "all" || station.key === key1) ||
-      (key2 === "all" || station.key === key2);
+      (key2 === "all");
   };
 
   const withTargets = (station: Station) => {
