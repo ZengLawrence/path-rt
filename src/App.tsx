@@ -2,8 +2,8 @@ import { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import StationCard from './components/StationCard';
 import TripSelect from './components/TripSelect';
-import { useGeoLocation, useSchedule } from './hooks';
-import { allStationKeysAndNames, sortByDistance } from './models';
+import { useSchedule } from './hooks';
+import { allStationKeysAndNames } from './models';
 import { getDestinationTargets } from './models/maps';
 import { scheduleType } from "./models/schedules";
 import type { Station } from './models/Station';
@@ -14,7 +14,6 @@ function byName(a: { name: string }, b: { name: string }) {
 
 function App() {
   const { stations, lastUpdated } = useSchedule();
-  const currentLocation = useGeoLocation();
 
   const stationsWithAllOption = [{ key: "all", name: "All" }].concat(allStationKeysAndNames().sort(byName));
   const [selectedStationKeys, setSelectedStationKeys] = useState({ key1: "all", key2: "all" });
@@ -43,7 +42,7 @@ function App() {
       <h1 className="text-center">NJ Path</h1>
       <TripSelect stations={stationsWithAllOption} selected={selectedStationKeys} onChange={setSelectedStationKeys} />
       <div className='mt-2'>Last updated: {lastUpdated ? lastUpdated.toLocaleString() : "Pending..."}</div>
-      {sortByDistance(currentLocation?.coords, stations)
+      {stations.sort(byName)
         .filter(bySelectedStations)
         .map(withTargets)
         .map((station) => (
