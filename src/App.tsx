@@ -18,10 +18,9 @@ function App() {
   const stationsWithAllOption = [{ key: "all", name: "All" }].concat(allStationKeysAndNames().sort(byName));
   const [selectedStationKeys, setSelectedStationKeys] = useState({ key1: "all", key2: "all" });
 
-  const bySelectedStations = (station: { key: string }) => {
-    const { key1, key2 } = selectedStationKeys;
-    return (key1 === "all" || station.key === key1) ||
-      (key2 === "all");
+  const byStartingStation = (station: { key: string }) => {
+    const { key1 } = selectedStationKeys;
+    return (key1 === "all" || station.key === key1);
   };
 
   const withTargets = (station: Station) => {
@@ -43,7 +42,7 @@ function App() {
       <TripSelect stations={stationsWithAllOption} selected={selectedStationKeys} onChange={setSelectedStationKeys} />
       <div className='mt-2'>Last updated: {lastUpdated ? lastUpdated.toLocaleString() : "Pending..."}</div>
       {stations.sort(byName)
-        .filter(bySelectedStations)
+        .filter(byStartingStation)
         .map(withTargets)
         .map((station) => (
           <StationCard key={station.key} station={station} />
