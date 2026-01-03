@@ -26,6 +26,12 @@ describe('Weekend schedule', () => {
       { key: 'WTC', target: 'NWK' },
     ]);
   });
+
+  test('JSQ to 23S should return 33S target for JSQ', () => {
+    expect(getDestinationTargets('JSQ', '23S', 'weekend')).toEqual([
+      { key: 'JSQ', target: '33S' },
+    ]);
+  });
 });
 
 describe('Multiple routes', () => {

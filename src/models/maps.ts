@@ -62,7 +62,7 @@ const HOB_33S_LINE = ['HOB', 'CHR', '09S', '14S', '23S', '33S'];
 const WTC_HOB_LINE = ['WTC', 'EXP', 'NEW', 'HOB'];
 const weekdayMapGraph = buildMapGraph([WTC_NWK_LINE, JSQ_33S_LINE, HOB_33S_LINE, WTC_HOB_LINE]);
 
-const JSQ_HOB_33S_LINE = ['JSQ', 'GRV', 'NEW', 'HOB', 'CHR', '09S', '14S', '23S', '33S', 'HOB'];
+const JSQ_HOB_33S_LINE = ['JSQ', 'GRV', 'NEW', 'HOB', 'CHR', '09S', '14S', '23S', '33S'];
 const weeknightHolidayMapGraph = buildMapGraph([WTC_NWK_LINE, JSQ_HOB_33S_LINE]);
 
 const _33S_HOB_JSQ_LINE = ['33S', '23S', '14S', '09S', 'CHR', 'HOB', 'NEW', 'EXP', 'GRV', 'JSQ'];
