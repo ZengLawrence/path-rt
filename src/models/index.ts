@@ -15,7 +15,7 @@ function distanceBetween(a: GeoCoordinate, b: GeoCoordinate): number {
   );
 }
 
-function addDistanceToLocation(station: Station, location: GeoCoordinate): { station: Station; distance: number } {
+export function addDistanceToLocation<S extends { key: string }>(station: S, location: GeoCoordinate): { station: S; distance: number } {
   const coords = stationsData[station.key];
   const distance = distanceBetween(coords, location);
   return { station, distance };

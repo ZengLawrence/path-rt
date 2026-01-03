@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Station } from "../models/Station";
 import { fetchStations } from "../services";
+import type { GeoCoordinate } from "../models/GeoCoordinate";
 
 export interface Schedule {
   stations: Station[];
@@ -32,7 +33,7 @@ export function useSchedule() {
 }
 
 export function useGeoLocation() {
-  const [currentLocation, setCurrentLocation] = useState<GeolocationPosition | null>(null);
+  const [currentLocation, setCurrentLocation] = useState<GeoCoordinate | null>(null);
 
   useEffect(() => {
     const geoError = (error: GeolocationPositionError) => {
@@ -43,8 +44,12 @@ export function useGeoLocation() {
       timeout: 500,
       maximumAge: 60000
     };
-    const watchId = navigator.geolocation.watchPosition(setCurrentLocation, geoError, geoOptions);
-    
+    const handlePositionChanged = (position: GeolocationPosition) => {
+      const { latitude, longitude } = position.coords;
+      setCurrentLocation({ latitude, longitude });
+    };
+    const watchId = navigator.geolocation.watchPosition(handlePositionChanged, geoError, geoOptions);
+
     return () => {
       navigator.geolocation.clearWatch(watchId);
     };
