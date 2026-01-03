@@ -27,7 +27,7 @@ function App() {
 
   const withTargets = (station: Station) => {
     const { key1, key2 } = selectedStationKeys;
-    if (key1 == "all" || key2 == "all") {
+    if (key1 == "all" || key2 == "all" || key1 == key2) {
       return station;
     } else {
       const targets = getDestinationTargets(key1, key2, scheduleType(new Date()))
