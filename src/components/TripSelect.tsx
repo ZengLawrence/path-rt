@@ -1,5 +1,4 @@
-import { faArrowRightArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ArrowLeftRight } from 'react-bootstrap-icons';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -55,7 +54,7 @@ const TripSelect = (props: Props) => {
       <Row><Form.Text>Select your trip:</Form.Text></Row>
       <Row>
         <Col><StationSelect stations={props.stations} selected={props.selected.key1} onChange={handleStation1Change} /></Col>
-        <Col xs="auto"><Form.Text className="text-center"><FontAwesomeIcon icon={faArrowRightArrowLeft} /></Form.Text></Col>
+        <Col xs="auto"><ArrowLeftRight /></Col>
         <Col><StationSelect stations={props.stations} selected={props.selected.key2} onChange={handleStation2Change} /></Col>
       </Row>
     </Form>
