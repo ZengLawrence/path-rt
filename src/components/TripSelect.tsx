@@ -1,4 +1,4 @@
-import { ArrowLeftRight } from 'react-bootstrap-icons';
+import { ArrowDownUp } from 'react-bootstrap-icons';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -44,7 +44,7 @@ const TripSelect = (props: Props) => {
   const handleStation1Change = (key: string) => {
     props.onChange({ key1: key, key2: props.selected.key2 });
   };
-  
+
   const handleStation2Change = (key: string) => {
     props.onChange({ key1: props.selected.key1, key2: key });
   };
@@ -53,9 +53,24 @@ const TripSelect = (props: Props) => {
     <Form>
       <Row><Form.Text>Select your trip:</Form.Text></Row>
       <Row>
-        <Col><StationSelect stations={props.stations} selected={props.selected.key1} onChange={handleStation1Change} /></Col>
-        <Col xs="auto"><ArrowLeftRight /></Col>
-        <Col><StationSelect stations={props.stations} selected={props.selected.key2} onChange={handleStation2Change} /></Col>
+        <Col>
+          <Row className="ps-2 mb-2">
+            <StationSelect
+              stations={props.stations}
+              selected={props.selected.key1}
+              onChange={handleStation1Change}
+            />
+          </Row>
+          <Row className="ps-2">
+            <StationSelect
+              stations={props.stations}
+              selected={props.selected.key2}
+              onChange={handleStation2Change} />
+          </Row>
+        </Col>
+        <Col xs="auto" className="d-flex flex-column justify-content-center">
+          <ArrowDownUp />
+        </Col>
       </Row>
     </Form>
   );
