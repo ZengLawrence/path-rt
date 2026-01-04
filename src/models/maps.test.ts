@@ -5,7 +5,7 @@ describe('Weekday schedule', () => {
   test('WTC to NEW should return HOB target for WTC', () => {
     expect(getDestinationTargets('WTC', 'NEW')).toEqual(expect.arrayContaining([
       { key: 'WTC', target: 'HOB' },
-      { key: 'WTC', target: 'NWK' },
+      expect.objectContaining({ key: 'WTC', target: 'NWK' }),
     ]));
   });
 });
@@ -13,7 +13,7 @@ describe('Weekday schedule', () => {
 describe('weeknight/holiday schedule', () => {
   test('WTC to NEW should return NWK target for WTC', () => {
     const expectedTargets = [
-      { key: 'WTC', target: 'NWK' },
+      expect.objectContaining({ key: 'WTC', target: 'NWK' }),
     ];
     expect(getDestinationTargets('WTC', 'NEW', 'weeknight')).toEqual(expectedTargets);
     expect(getDestinationTargets('WTC', 'NEW', 'holiday')).toEqual(expectedTargets);
@@ -23,7 +23,7 @@ describe('weeknight/holiday schedule', () => {
 describe('Weekend schedule', () => {
   test('WTC to NEW should return NWK target for WTC', () => {
     expect(getDestinationTargets('WTC', 'NEW', 'weekend')).toEqual([
-      { key: 'WTC', target: 'NWK' },
+      expect.objectContaining({ key: 'WTC', target: 'NWK' }),
     ]);
   });
 
@@ -37,8 +37,16 @@ describe('Weekend schedule', () => {
 describe('Multiple routes', () => {
   test('23S to EXP on weekday should return HOB and JSQ targets for 23S', () => {
     expect(getDestinationTargets('23S', 'EXP', 'weekday')).toEqual(expect.arrayContaining([
-      { key: '23S', target: 'JSQ' },
-      { key: '23S', target: 'HOB' },
+      expect.objectContaining({ key: '23S', target: 'JSQ' }),
+      expect.objectContaining({ key: '23S', target: 'HOB' }),
     ]));
+  });
+});
+
+describe('Transfer', () => {
+  test('WTC to NEW should return transfer key GRV for WTC', () => {
+    expect(getDestinationTargets('WTC', 'NEW', 'weekend')).toEqual([
+      { key: 'WTC', target: 'NWK', transferKey: 'GRV' },
+    ]);
   });
 });

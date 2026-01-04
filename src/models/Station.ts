@@ -1,4 +1,4 @@
-interface Train {
+export interface Train {
   headSign: string;
   arrivalTimeMessage: string;
   target: string;

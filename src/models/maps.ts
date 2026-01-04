@@ -28,7 +28,7 @@ class Graph {
     const lineName = [target, reversedTarget].join('-');
     const newNode = new EdgeNode(from, to, target, lineName, p);
     this.adjacencyList.set(from, newNode);
-    if (!directed) { 
+    if (!directed) {
       this.addEdge(to, reversedTarget, from, target, true);
     }
   }
@@ -71,26 +71,42 @@ const weekendMapGraph = buildMapGraph([WTC_NWK_LINE], [JSQ_HOB_33S_LINE, _33S_HO
 export interface DestinationTarget {
   key: string;
   target: string;
+  transferKey?: string;
+}
+
+function orderedList(root: EdgeNode | undefined, lineName: string | undefined) {
+  const l = [];
+  let n = root;
+  while (n) {
+    if (n.lineName == lineName) {
+      // insert at the head
+      l.unshift(n)
+    } else {
+      l.push(n);
+    }
+    n = n.next;
+  }
+  return l;
 }
 
 function findRoute(graph: Graph, from: string, to: string, excludeLines: string[] = []): EdgeNode[] {
   const visited = new Set<string>();
   const path: EdgeNode[] = [];
-  function dfs(current: string): boolean {
+  function dfs(current: string, lineName: string | undefined = undefined): boolean {
     if (current === to) {
       return true;
     }
     visited.add(current);
-    let edgeNode = graph.adjacencyList.get(current);
-    while (edgeNode) {
-      if (!visited.has(edgeNode.toKey) && !excludeLines.includes(edgeNode.lineName)) {
+    const l = orderedList(graph.adjacencyList.get(current), lineName);
+    while (l.length > 0) {
+      const edgeNode = l.shift();
+      if (edgeNode && !visited.has(edgeNode.toKey) && !excludeLines.includes(edgeNode.lineName)) {
         path.push(edgeNode);
-        if (dfs(edgeNode.toKey)) {
+        if (dfs(edgeNode.toKey, edgeNode.lineName)) {
           return true;
         }
         path.pop();
       }
-      edgeNode = edgeNode.next;
     }
     return false;
   }
@@ -110,6 +126,16 @@ function getGraph(schedule: ScheduleType): Graph {
   }
 }
 
+function getFirstTransferKey(trip: EdgeNode[]): string | undefined {
+  const target = trip[0].target;
+  for (const node of trip.slice(1)) {
+    if (node.target != target) {
+      return node.fromKey;
+    }
+  }
+  return undefined;
+}
+
 export function getDestinationTargets(from: string, to: string, schedule: ScheduleType = 'weekday'): DestinationTarget[] {
   const graph = getGraph(schedule);
   const targets: DestinationTarget[] = [];
@@ -117,7 +143,8 @@ export function getDestinationTargets(from: string, to: string, schedule: Schedu
   const excludeLines: string[] = [];
   while (trip.length > 0) {
     const start = trip[0];
-    targets.push({ key: start.fromKey, target: start.target });
+    const transferKey = getFirstTransferKey(trip);
+    targets.push({ key: start.fromKey, target: start.target, transferKey });
     excludeLines.push(start.lineName);
     trip = findRoute(graph, from, to, excludeLines);
   }

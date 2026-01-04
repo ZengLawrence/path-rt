@@ -3,13 +3,30 @@ import Container from 'react-bootstrap/Container';
 import StationCard from './components/StationCard';
 import TripSelect from './components/TripSelect';
 import { useGeoLocation, useSchedule } from './hooks';
-import { addDistanceToLocation, allStationKeysAndNames } from './models';
-import { getDestinationTargets } from './models/maps';
+import { addDistanceToLocation, allStationKeysAndNames, getStationName } from './models';
+import { getDestinationTargets, type DestinationTarget } from './models/maps';
 import { scheduleType } from "./models/schedules";
-import type { Station } from './models/Station';
+import type { Station, Train } from './models/Station';
 
 function byName(a: { name: string }, b: { name: string }) {
   return a.name.localeCompare(b.name);
+}
+
+function getTransferKey(targets: DestinationTarget[], target: string) {
+  for (const dt of targets) {
+    if (dt.target == target) {
+      return dt.transferKey;
+    }
+  }
+  return undefined;
+}
+
+function addTransferStation(train: Train, transferKey: string | undefined) {
+  if (transferKey) {
+    const transferStation = getStationName(transferKey);
+    return { ...train, transferStation };
+  }
+  return train;
 }
 
 function App() {
@@ -23,14 +40,14 @@ function App() {
   const handleStationsChange = (selected: { key1: string, key2: string }) => {
     setSelectedStationKeys(selected);
     if (location && selected.key1 !== "all" && selected.key2 !== "all") {
-      const orderedTrip = [{key: selected.key1}, {key: selected.key2}]
+      const orderedTrip = [{ key: selected.key1 }, { key: selected.key2 }]
         .map(station => addDistanceToLocation(station, location))
         .sort((a, b) => a.distance - b.distance)
         .map(({ station }) => station.key);
       setTrip({ from: orderedTrip[0], to: orderedTrip[1] });
     } else {
       setTrip({ from: selected.key1, to: selected.key2 });
-  }
+    }
   };
 
   const byStartingStation = (station: { key: string }) => {
@@ -43,10 +60,11 @@ function App() {
     if (from == "all" || to == "all" || from == to) {
       return station;
     } else {
-      const targets = getDestinationTargets(from, to, scheduleType(new Date()))
-        .filter(segment => segment.key == station.key)
-        .map(segment => segment.target);
-      const targetedTrains = station.trains.filter(train => targets.includes(train.target));
+      const destTargets = getDestinationTargets(from, to, scheduleType(new Date()));
+      const targets = destTargets.map(segment => segment.target);
+      const targetedTrains = station.trains
+        .filter(train => targets.includes(train.target))
+        .map(train => addTransferStation(train, getTransferKey(destTargets, train.target)));
       return { ...station, trains: targetedTrains };
     }
   }

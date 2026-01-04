@@ -3,14 +3,25 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import type { Station } from '../models/Station';
 import LineColorIcon from './LineColorIcon';
 
-interface Props {
+interface Train {
+  headSign: string;
+  arrivalTimeMessage: string;
+  lineColors: string[];
+  transferStation?: string;
+}
+
+interface Station {
+  name: string;
+  trains: Train[];
+}
+
+export interface StationCardProps {
   station: Station;
 }
 
-function StationCard(props: Props) {
+function StationCard(props: StationCardProps) {
   const { station } = props;
   return <Card>
     <Card.Header>{station.name}</Card.Header>
@@ -22,6 +33,8 @@ function StationCard(props: Props) {
               <div className="d-flex align-items-center gap-1">
                 <LineColorIcon colors={train.lineColors} />{train.headSign}
               </div>
+              {train.transferStation
+                && <div className="text-muted">xfer {train.transferStation}</div>}
             </Col>
             <Col xs="auto" className="text-end">{train.arrivalTimeMessage}</Col>
           </Row>

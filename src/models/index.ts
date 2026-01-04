@@ -41,3 +41,7 @@ export function sortByDistance(
 export function allStationKeysAndNames() {
   return Object.entries(stationsData).map(([key, station]) => ({ key, name: station.name }));
 }
+
+export function getStationName(key: string): string {
+  return stationsData[key].name;
+}
