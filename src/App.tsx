@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
+import { loadTripSelection, saveTripSelection } from './app/localStorage';
 import StationCard from './components/StationCard';
 import TripSelect from './components/TripSelect';
 import { useGeoLocation, useSchedule } from './hooks';
 import { addDistanceToLocation, allStationKeysAndNames, getStationName } from './models';
+import type { GeoCoordinate } from './models/GeoCoordinate';
 import { getDestinationTargets, type DestinationTarget } from './models/maps';
 import { scheduleType } from "./models/schedules";
 import type { Station, Train } from './models/Station';
@@ -29,25 +31,33 @@ function addTransferStation(train: Train, transferKey: string | undefined) {
   return train;
 }
 
+function orderTripByLocation(selected: { key1: string, key2: string }, location: GeoCoordinate | null) {
+  if (location && selected.key1 !== "all" && selected.key2 !== "all") {
+    const orderedTrip = [{ key: selected.key1 }, { key: selected.key2 }]
+      .map(station => addDistanceToLocation(station, location))
+      .sort((a, b) => a.distance - b.distance)
+      .map(({ station }) => station.key);
+    return { from: orderedTrip[0], to: orderedTrip[1] };
+  } else {
+    return { from: selected.key1, to: selected.key2 };
+  }
+}
+
 function App() {
   const { stations, lastUpdated } = useSchedule();
 
   const stationsWithAllOption = [{ key: "all", name: "All" }].concat(allStationKeysAndNames().sort(byName));
-  const [selectedStationKeys, setSelectedStationKeys] = useState({ key1: "all", key2: "all" });
-  const [trip, setTrip] = useState({ from: "all", to: "all" });
+  const [selectedStationKeys, setSelectedStationKeys] = useState(() => loadTripSelection());
   const location = useGeoLocation();
+  const [trip, setTrip] = useState(() => orderTripByLocation(selectedStationKeys, location));
+
+  useEffect(() => {
+    setTrip(orderTripByLocation(selectedStationKeys, location));
+  }, [selectedStationKeys, location]);
 
   const handleStationsChange = (selected: { key1: string, key2: string }) => {
     setSelectedStationKeys(selected);
-    if (location && selected.key1 !== "all" && selected.key2 !== "all") {
-      const orderedTrip = [{ key: selected.key1 }, { key: selected.key2 }]
-        .map(station => addDistanceToLocation(station, location))
-        .sort((a, b) => a.distance - b.distance)
-        .map(({ station }) => station.key);
-      setTrip({ from: orderedTrip[0], to: orderedTrip[1] });
-    } else {
-      setTrip({ from: selected.key1, to: selected.key2 });
-    }
+    saveTripSelection(selected);
   };
 
   const byStartingStation = (station: { key: string }) => {
