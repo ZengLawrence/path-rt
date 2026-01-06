@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import { loadTripSelection, saveTripSelection } from './app/localStorage';
 import StationCard from './components/StationCard';
-import TripSelect from './components/TripSelect';
+import SelectTripForm from './components/SelectTripForm';
 import { useGeoLocation, useSchedule } from './hooks';
 import { addDistanceToLocation, allStationKeysAndNames, getStationName } from './models';
 import type { GeoCoordinate } from './models/GeoCoordinate';
@@ -31,8 +31,12 @@ function addTransferStation(train: Train, transferKey: string | undefined) {
   return train;
 }
 
-function orderTripByLocation(selected: { key1: string, key2: string }, location: GeoCoordinate | null) {
-  if (location && selected.key1 !== "all" && selected.key2 !== "all") {
+function orderTripByLocation(selected: { key1: string, key2: string; lockDirection?: boolean; }, location: GeoCoordinate | null) {
+  const orderByDistance = location
+    && !selected.lockDirection
+    && selected.key1 !== "all"
+    && selected.key2 !== "all";
+  if (orderByDistance) {
     const orderedTrip = [{ key: selected.key1 }, { key: selected.key2 }]
       .map(station => addDistanceToLocation(station, location))
       .sort((a, b) => a.distance - b.distance)
@@ -55,7 +59,7 @@ function App() {
     setTrip(orderTripByLocation(selectedStationKeys, location));
   }, [selectedStationKeys, location]);
 
-  const handleStationsChange = (selected: { key1: string, key2: string }) => {
+  const handleStationsChange = (selected: { key1: string, key2: string; lockDirection?: boolean; }) => {
     setSelectedStationKeys(selected);
     saveTripSelection(selected);
   };
@@ -82,7 +86,11 @@ function App() {
   return (
     <Container>
       <h1 className="text-center">NJ Path</h1>
-      <TripSelect stations={stationsWithAllOption} selected={selectedStationKeys} onChange={handleStationsChange} />
+      <SelectTripForm
+        stations={stationsWithAllOption}
+        selected={selectedStationKeys}
+        onChange={handleStationsChange}
+      />
       <p className='mt-2'>Last updated: {lastUpdated ? lastUpdated.toLocaleString() : "Pending..."}</p>
       {stations.sort(byName)
         .filter(byStartingStation)
