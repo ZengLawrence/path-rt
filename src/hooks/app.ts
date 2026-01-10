@@ -23,7 +23,7 @@ function getTransferKey(targets: DestinationTarget[], target: string) {
 function orderDirectionByLocation(
   { key1, key2, lockDirection }: { key1: string; key2: string; lockDirection?: boolean; },
   location: GeoCoordinate | null) {
-  const orderByDistance = location && !lockDirection && key1 !== "all" && key2 !== "all";
+  const orderByDistance = location && lockDirection !== true && key1 !== "all" && key2 !== "all";
   if (orderByDistance) {
     const orderedTrip = [{ key: key1 }, { key: key2 }]
       .map(station => addDistanceToLocation(station, location))
@@ -43,7 +43,12 @@ function destinationTargets({ from, to }: { from: string; to: string; }): Destin
   if (from == "all" || to == "all" || from == to) {
     return [];
   } else {
-    return getDestinationTargets(from, to, scheduleType(new Date()));
+    const allRoutes = getDestinationTargets(from, to, scheduleType(new Date()));
+    const directRoutes = allRoutes.filter(route => route.transferKey === undefined);
+    if (directRoutes.length > 0) {
+      return directRoutes;
+    }
+    return allRoutes;
   }
 }
 
