@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useGeoLocation, type LocationStatus } from "./location";
 import { useSchedule } from './services';
 import { addDistanceToLocation, getStationName } from '../models';
@@ -88,13 +88,13 @@ export function useAppState(initialState: TripSelection | (() => TripSelection))
   const [selectedStationKeys, setSelectedStationKeys] = useState(initialState);
   const [showAlert, setShowAlert] = useState(false);
 
-  const locationStatusCallback = (status: LocationStatus) => {
+  const locationStatusCallback = useCallback((status: LocationStatus) => {
     if (status === "unavailable") {
       setShowAlert(true);
     } else {
       setShowAlert(false);
     }
-  }
+  }, [setShowAlert]);
   const currentLocation = useGeoLocation(locationStatusCallback);
 
   const trip = orderDirectionByLocation(selectedStationKeys, currentLocation);
