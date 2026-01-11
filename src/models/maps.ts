@@ -66,7 +66,7 @@ const JSQ_HOB_33S_LINE = ['JSQ', 'GRV', 'NEW', 'HOB', 'CHR', '09S', '14S', '23S'
 const weeknightHolidayMapGraph = buildMapGraph([WTC_NWK_LINE, JSQ_HOB_33S_LINE]);
 
 const _33S_HOB_JSQ_LINE = ['33S', '23S', '14S', '09S', 'CHR', 'HOB', 'NEW', 'EXP', 'GRV', 'JSQ'];
-const weekendMapGraph = buildMapGraph([WTC_NWK_LINE], [JSQ_HOB_33S_LINE, _33S_HOB_JSQ_LINE]);
+const weekendMapGraph = buildMapGraph([WTC_NWK_LINE, HOB_33S_LINE], [JSQ_HOB_33S_LINE, _33S_HOB_JSQ_LINE]);
 
 export interface DestinationTarget {
   key: string;

@@ -32,6 +32,14 @@ describe('Weekend schedule', () => {
       { key: 'JSQ', target: '33S' },
     ]);
   });
+
+
+  test('14S to HOB should return HOB and JSQ targets for 14S', () => {
+    expect(getDestinationTargets('14S', 'HOB', 'weekend')).toEqual(expect.arrayContaining([
+      expect.objectContaining({ key: '14S', target: 'HOB' }),
+      expect.objectContaining({ key: '14S', target: 'JSQ' }),
+    ]));
+  });
 });
 
 describe('Multiple routes', () => {
