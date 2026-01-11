@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useGeoLocation } from "./location";
+import { useGeoLocation, type LocationStatus } from "./location";
 import { useSchedule } from './services';
 import { addDistanceToLocation, getStationName } from '../models';
 import type { GeoCoordinate } from '../models/GeoCoordinate';
@@ -86,18 +86,29 @@ export interface TripSelection {
 export function useAppState(initialState: TripSelection | (() => TripSelection)) {
   const { stations, lastUpdated } = useSchedule();
   const [selectedStationKeys, setSelectedStationKeys] = useState(initialState);
-  const location = useGeoLocation();
+  const [showAlert, setShowAlert] = useState(false);
 
-  const trip = orderDirectionByLocation(selectedStationKeys, location);
+  const locationStatusCallback = (status: LocationStatus) => {
+    if (status === "unavailable") {
+      setShowAlert(true);
+    } else {
+      setShowAlert(false);
+    }
+  }
+  const currentLocation = useGeoLocation(locationStatusCallback);
+
+  const trip = orderDirectionByLocation(selectedStationKeys, currentLocation);
   const destTargets = destinationTargets(trip);
   const displayedStations = stations.sort(byName)
     .filter(station => isStartingStation(station, trip))
     .map(station => limitToTargets(station, destTargets))
     .map(station => addTransferStation(station, destTargets));
 
+  const closeAlert = () => { setShowAlert(false); };
   return {
     lastUpdated,
     selectedStationKeys, setSelectedStationKeys,
-    displayedStations
+    displayedStations,
+    showAlert, closeAlert,
   }
 }

@@ -1,3 +1,4 @@
+import Alert from 'react-bootstrap/Alert';
 import Container from 'react-bootstrap/Container';
 import { loadTripSelection, saveTripSelection } from './app/localStorage';
 import SelectTripForm from './components/SelectTripForm';
@@ -13,7 +14,8 @@ function App() {
   const {
     lastUpdated,
     selectedStationKeys, setSelectedStationKeys,
-    displayedStations
+    displayedStations,
+    showAlert, closeAlert
   } = useAppState(() => loadTripSelection())
 
   const handleTripSelectionChange = (selected: { key1: string, key2: string; lockDirection?: boolean; }) => {
@@ -26,6 +28,14 @@ function App() {
   return (
     <Container>
       <h1 className="text-center">NJ Path</h1>
+      {showAlert &&
+        <Alert
+          variant="warning"
+          dismissible
+          onClose={closeAlert}
+        >
+          Location data is not available.
+        </Alert>}
       <SelectTripForm
         stations={stationsWithAllOption}
         selected={selectedStationKeys}
