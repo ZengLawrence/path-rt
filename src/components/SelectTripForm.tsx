@@ -48,11 +48,11 @@ const SelectTripForm = (props: Props) => {
   const { key1, key2, lockDirection } = props.selected;
 
   const handleStation1Change = (key: string) => {
-    props.onChange({ key1: key, key2 });
+    props.onChange({ key1: key, key2, lockDirection });
   };
 
   const handleStation2Change = (key: string) => {
-    props.onChange({ key1, key2: key });
+    props.onChange({ key1, key2: key, lockDirection });
   };
 
   const handleLockDirectionChange = (val: boolean) => {
