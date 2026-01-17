@@ -1,22 +1,41 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import type { Station } from "../models/Station";
 import { fetchStations } from "../services";
 
 export interface Schedule {
   stations: Station[];
   lastUpdated: Date | null;
+  isStale?: boolean;
 }
 
-export function useSchedule() {
-  const [schedule, setSchedule] = useState<Schedule>({ stations: [], lastUpdated: null });
+type ScheduleAction =
+  | { type: 'update-schedule', payload: Station[] }
+  | { type: 'stale-schedule' };
 
-  const loadSchedule = () => {
+function reducer(state: Schedule, action: ScheduleAction): Schedule {
+  switch (action.type) {
+    case "update-schedule":
+      return { stations: action.payload, lastUpdated: new Date(), isStale: false };
+    case "stale-schedule":
+      return { ...state, isStale: true };
+    default:
+      return state;
+  }
+}
+
+const initialState: Schedule = { stations: [], lastUpdated: null };
+
+export function useSchedule() {
+  const [schedule, dispatch] = useReducer(reducer, initialState);
+
+  const loadSchedule = useCallback(() => {
     fetchStations().then((stations) => {
-      setSchedule({ stations, lastUpdated: new Date() });
+      dispatch({ type: "update-schedule", payload: stations });
     }).catch((error: unknown) => {
+      dispatch({ type: "stale-schedule" });
       console.log("Error fetching stations:", error);
     });
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     loadSchedule();
@@ -27,7 +46,7 @@ export function useSchedule() {
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
+  }, [loadSchedule]);
 
   return { schedule, loadSchedule };
 }

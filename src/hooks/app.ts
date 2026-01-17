@@ -85,7 +85,7 @@ export interface TripSelection {
 
 export function useAppState(initialState: TripSelection | (() => TripSelection)) {
   const { 
-    schedule: { stations, lastUpdated },
+    schedule: { stations, lastUpdated, isStale },
     loadSchedule 
   } = useSchedule();
   const [selectedStationKeys, setSelectedStationKeys] = useState(initialState);
@@ -110,7 +110,7 @@ export function useAppState(initialState: TripSelection | (() => TripSelection))
   const closeAlert = () => { setShowAlert(false); };
   const refreshSchedule = loadSchedule;
   return {
-    lastUpdated,
+    lastUpdated, isStale,
     selectedStationKeys, setSelectedStationKeys,
     displayedStations,
     showAlert, closeAlert,

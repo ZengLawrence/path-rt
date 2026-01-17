@@ -12,9 +12,37 @@ function byName(a: { name: string }, b: { name: string }) {
   return a.name.localeCompare(b.name);
 }
 
+function LastUpdatedPanel(
+  {
+    lastUpdated,
+    refreshSchedule,
+    isStale,
+  }: {
+    lastUpdated: Date | null;
+    refreshSchedule: () => void;
+    isStale?: boolean;
+  }
+) {
+
+  const className = (isStale ? "bg-warning" : "");
+  const updatedTimeSpan = <span className={className}>{lastUpdated?.toLocaleString()}</span>;
+
+  return (<div className="mb-2">
+    <span className="me-2">
+      Last updated: {lastUpdated ? updatedTimeSpan : "Pending..."}
+    </span>
+    <Button
+      variant="outline-secondary"
+      onClick={refreshSchedule}
+    >
+      <ArrowClockwise />
+    </Button>
+  </div>);
+}
+
 function App() {
   const {
-    lastUpdated,
+    lastUpdated, isStale,
     selectedStationKeys, setSelectedStationKeys,
     displayedStations,
     showAlert, closeAlert,
@@ -44,17 +72,11 @@ function App() {
         selected={selectedStationKeys}
         onChange={handleTripSelectionChange}
       />
-      <div className="mb-2">
-        <span className="me-2">
-          Last updated: {lastUpdated ? lastUpdated.toLocaleString() : "Pending..."}
-        </span>
-        <Button
-          variant="outline-secondary"
-          onClick={refreshSchedule}
-        >
-          <ArrowClockwise />
-        </Button>
-      </div>
+      <LastUpdatedPanel 
+        lastUpdated={lastUpdated} 
+        refreshSchedule={refreshSchedule}
+        isStale={isStale}
+        />
       {displayedStations.map((station) => (
         <StationCard key={station.key} station={station} />
       ))}
