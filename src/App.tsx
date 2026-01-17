@@ -1,8 +1,7 @@
-import { ArrowClockwise } from 'react-bootstrap-icons';
 import Alert from 'react-bootstrap/Alert';
-import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import { loadTripSelection, saveTripSelection } from './app/localStorage';
+import LastUpdatedPanel from './components/LastUpdatedPanel';
 import SelectTripForm from './components/SelectTripForm';
 import StationCard from './components/StationCard';
 import { useAppState } from './hooks/app';
@@ -10,34 +9,6 @@ import { allStationKeysAndNames } from './models';
 
 function byName(a: { name: string }, b: { name: string }) {
   return a.name.localeCompare(b.name);
-}
-
-function LastUpdatedPanel(
-  {
-    lastUpdated,
-    refreshSchedule,
-    isStale,
-  }: {
-    lastUpdated: Date | null;
-    refreshSchedule: () => void;
-    isStale?: boolean;
-  }
-) {
-
-  const className = (isStale ? "bg-warning" : "");
-  const updatedTimeSpan = <span className={className}>{lastUpdated?.toLocaleString()}</span>;
-
-  return (<div className="mb-2">
-    <span className="me-2">
-      Last updated: {lastUpdated ? updatedTimeSpan : "Pending..."}
-    </span>
-    <Button
-      variant="outline-secondary"
-      onClick={refreshSchedule}
-    >
-      <ArrowClockwise />
-    </Button>
-  </div>);
 }
 
 function App() {
