@@ -1,4 +1,6 @@
+import { ArrowClockwise } from 'react-bootstrap-icons';
 import Alert from 'react-bootstrap/Alert';
+import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import { loadTripSelection, saveTripSelection } from './app/localStorage';
 import SelectTripForm from './components/SelectTripForm';
@@ -15,7 +17,8 @@ function App() {
     lastUpdated,
     selectedStationKeys, setSelectedStationKeys,
     displayedStations,
-    showAlert, closeAlert
+    showAlert, closeAlert,
+    refreshSchedule
   } = useAppState(() => loadTripSelection())
 
   const handleTripSelectionChange = (selected: { key1: string, key2: string; lockDirection?: boolean; }) => {
@@ -41,7 +44,17 @@ function App() {
         selected={selectedStationKeys}
         onChange={handleTripSelectionChange}
       />
-      <p className='mt-2'>Last updated: {lastUpdated ? lastUpdated.toLocaleString() : "Pending..."}</p>
+      <div className="mb-2">
+        <span className="me-2">
+          Last updated: {lastUpdated ? lastUpdated.toLocaleString() : "Pending..."}
+        </span>
+        <Button
+          variant="outline-secondary"
+          onClick={refreshSchedule}
+        >
+          <ArrowClockwise />
+        </Button>
+      </div>
       {displayedStations.map((station) => (
         <StationCard key={station.key} station={station} />
       ))}

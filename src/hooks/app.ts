@@ -84,7 +84,10 @@ export interface TripSelection {
 }
 
 export function useAppState(initialState: TripSelection | (() => TripSelection)) {
-  const { stations, lastUpdated } = useSchedule();
+  const { 
+    schedule: { stations, lastUpdated },
+    loadSchedule 
+  } = useSchedule();
   const [selectedStationKeys, setSelectedStationKeys] = useState(initialState);
   const [showAlert, setShowAlert] = useState(false);
 
@@ -105,10 +108,12 @@ export function useAppState(initialState: TripSelection | (() => TripSelection))
     .map(station => addTransferStation(station, destTargets));
 
   const closeAlert = () => { setShowAlert(false); };
+  const refreshSchedule = loadSchedule;
   return {
     lastUpdated,
     selectedStationKeys, setSelectedStationKeys,
     displayedStations,
     showAlert, closeAlert,
+    refreshSchedule,
   }
 }
