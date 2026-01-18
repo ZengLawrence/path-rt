@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
-import { useGeoLocation, type LocationStatus } from "./location";
+import { useState } from "react";
+import { useGeoLocation } from "./location";
 import { useSchedule } from './services';
 import { addDistanceToLocation, getStationName } from '../models';
 import type { GeoCoordinate } from '../models/GeoCoordinate';
@@ -84,21 +84,14 @@ export interface TripSelection {
 }
 
 export function useAppState(initialState: TripSelection | (() => TripSelection)) {
-  const { 
+  const {
     schedule: { stations, lastUpdated, isStale },
-    loadSchedule 
+    loadSchedule
   } = useSchedule();
   const [selectedStationKeys, setSelectedStationKeys] = useState(initialState);
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState(true);
 
-  const locationStatusCallback = useCallback((status: LocationStatus) => {
-    if (status === "unavailable") {
-      setShowAlert(true);
-    } else {
-      setShowAlert(false);
-    }
-  }, [setShowAlert]);
-  const currentLocation = useGeoLocation(locationStatusCallback);
+  const { currentLocation, status: locationStatus } = useGeoLocation();
 
   const trip = orderDirectionByLocation(selectedStationKeys, currentLocation);
   const destTargets = destinationTargets(trip);
@@ -109,11 +102,12 @@ export function useAppState(initialState: TripSelection | (() => TripSelection))
 
   const closeAlert = () => { setShowAlert(false); };
   const refreshSchedule = loadSchedule;
+  const shouldShowAlert = locationStatus == "unavailable" && showAlert;
   return {
     lastUpdated, isStale,
     selectedStationKeys, setSelectedStationKeys,
     displayedStations,
-    showAlert, closeAlert,
+    showAlert: shouldShowAlert, closeAlert,
     refreshSchedule,
   }
 }
