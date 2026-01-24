@@ -16,7 +16,7 @@ function App() {
     lastUpdated, isStale,
     selectedStationKeys, setSelectedStationKeys,
     displayedStations,
-    showAlert, closeAlert,
+    showAlert,
     refreshSchedule
   } = useAppState(() => loadTripSelection())
 
@@ -33,8 +33,6 @@ function App() {
       {showAlert &&
         <Alert
           variant="warning"
-          dismissible
-          onClose={closeAlert}
         >
           Location data is not available.
         </Alert>}

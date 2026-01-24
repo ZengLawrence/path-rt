@@ -89,7 +89,6 @@ export function useAppState(initialState: TripSelection | (() => TripSelection))
     loadSchedule
   } = useSchedule();
   const [selectedStationKeys, setSelectedStationKeys] = useState(initialState);
-  const [showAlert, setShowAlert] = useState(true);
 
   const { currentLocation, status: locationStatus } = useGeoLocation();
 
@@ -100,14 +99,13 @@ export function useAppState(initialState: TripSelection | (() => TripSelection))
     .map(station => limitToTargets(station, destTargets))
     .map(station => addTransferStation(station, destTargets));
 
-  const closeAlert = () => { setShowAlert(false); };
   const refreshSchedule = loadSchedule;
-  const shouldShowAlert = locationStatus == "unavailable" && showAlert;
+  const showAlert = (locationStatus == "unavailable");
   return {
     lastUpdated, isStale,
     selectedStationKeys, setSelectedStationKeys,
     displayedStations,
-    showAlert: shouldShowAlert, closeAlert,
+    showAlert,
     refreshSchedule,
   }
 }
